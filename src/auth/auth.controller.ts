@@ -13,8 +13,9 @@ import { RegisterDTO } from './dto/register.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { AuthGuard } from './auth.guard';
+import { AdminGuard } from './admin.guard';
 import { MailService } from '../mail/mail.service';
+import { TeacherGuard } from './teacher.guard';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -42,8 +43,6 @@ export class AuthController {
 
   @Post('admin/teacher/create')
   async createNewTeacher(@Body() body: RegisterDTO) {
-
-    
     const { password_confirm, ...data } = body;
 
     if (body.password !== password_confirm) {
@@ -71,7 +70,7 @@ export class AuthController {
     };
   }
 
-  @Post('admin/login')
+  @Post(['admin/login', 'teacher/login'])
   async login(
     @Body('email') email: string,
     @Body('password') password: string,
@@ -99,12 +98,21 @@ export class AuthController {
     };
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AdminGuard)
   @Get('admin/logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('jwt');
     return {
-      message: 'Logout Successfull',
+      message: 'Admin Logout Successfull',
+    };
+  }
+
+  @UseGuards(TeacherGuard)
+  @Get('teacher/logout')
+  async teacherLogout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('jwt');
+    return {
+      message: 'Teacher Logout Successfull',
     };
   }
 }
