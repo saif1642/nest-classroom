@@ -14,11 +14,13 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { AuthGuard } from './auth.guard';
+import { MailService } from '../mail/mail.service';
 @Controller('auth')
 export class AuthController {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   @Post('admin/register')
@@ -36,6 +38,37 @@ export class AuthController {
       password: hashed,
       user_type: 'admin',
     });
+  }
+
+  @Post('admin/teacher/create')
+  async createNewTeacher(@Body() body: RegisterDTO) {
+
+    
+    const { password_confirm, ...data } = body;
+
+    if (body.password !== password_confirm) {
+      throw new BadRequestException('Password do not match !');
+    }
+
+    const hashed = await bcrypt.hash(body.password, 12);
+
+    const user = await this.userService.save({
+      ...data,
+      password: hashed,
+      user_type: 'teacher',
+    });
+
+    if (user) {
+      await this.mailService.sendTeacherConfirmation(body.password, user.email);
+      return {
+        message: 'Teacher Created Successfully',
+        data: user,
+      };
+    }
+
+    return {
+      message: 'Something went wrong',
+    };
   }
 
   @Post('admin/login')
