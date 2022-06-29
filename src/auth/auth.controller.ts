@@ -15,7 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { AdminGuard } from './admin.guard';
 import { MailService } from '../mail/mail.service';
-import { TeacherGuard } from './teacher.guard';
+import { TeacherGuard } from '../teacher.guard';
 @Controller('auth')
 export class AuthController {
   constructor(

@@ -10,7 +10,7 @@ export class TeacherGuard implements CanActivate {
     try {
       const jwt = request.cookies['jwt'];
       const { user_type } = this.jwtService.verify(jwt);
-      return user_type == 'teacher';
+      return user_type === 'teacher';
     } catch {
       return false;
     }
