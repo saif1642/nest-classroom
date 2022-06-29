@@ -2,15 +2,18 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   NotFoundException,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { RegisterDTO } from './dto/register.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { AuthGuard } from './auth.guard';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -53,12 +56,22 @@ export class AuthController {
 
     const jwt = await this.jwtService.signAsync({
       id: user.id,
+      user_type: user.user_type,
     });
 
     response.cookie('jwt', jwt, { httpOnly: true });
 
     return {
       message: 'Login successful',
+    };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('admin/logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('jwt');
+    return {
+      message: 'Logout Successfull',
     };
   }
 }
