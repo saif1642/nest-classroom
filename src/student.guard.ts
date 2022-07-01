@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserType } from '../user/user';
+import { UserType } from './user/user';
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class StudentGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   canActivate(context: ExecutionContext) {
@@ -11,7 +11,7 @@ export class AdminGuard implements CanActivate {
     try {
       const jwt = request.cookies['jwt'];
       const { user_type } = this.jwtService.verify(jwt);
-      return user_type == UserType.ADMIN;
+      return user_type === UserType.STUDENT;
     } catch {
       return false;
     }

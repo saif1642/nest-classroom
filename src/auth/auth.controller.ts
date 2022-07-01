@@ -16,6 +16,8 @@ import { Response } from 'express';
 import { AdminGuard } from './admin.guard';
 import { MailService } from '../mail/mail.service';
 import { TeacherGuard } from '../teacher.guard';
+import { UserType } from '../user/user';
+import { StudentGuard } from '../student.guard';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -37,7 +39,24 @@ export class AuthController {
     return this.userService.save({
       ...data,
       password: hashed,
-      user_type: 'admin',
+      user_type: UserType.ADMIN,
+    });
+  }
+
+  @Post('student/register')
+  async studentRegister(@Body() body: RegisterDTO) {
+    const { password_confirm, ...data } = body;
+
+    if (body.password !== password_confirm) {
+      throw new BadRequestException('Password do not match !');
+    }
+
+    const hashed = await bcrypt.hash(body.password, 12);
+
+    return this.userService.save({
+      ...data,
+      password: hashed,
+      user_type: UserType.STUDENT,
     });
   }
 
@@ -54,7 +73,7 @@ export class AuthController {
     const user = await this.userService.save({
       ...data,
       password: hashed,
-      user_type: 'teacher',
+      user_type: UserType.TEACHER,
     });
 
     if (user) {
@@ -70,7 +89,7 @@ export class AuthController {
     };
   }
 
-  @Post(['admin/login', 'teacher/login'])
+  @Post(['admin/login', 'teacher/login', 'student/login'])
   async login(
     @Body('email') email: string,
     @Body('password') password: string,
@@ -113,6 +132,15 @@ export class AuthController {
     response.clearCookie('jwt');
     return {
       message: 'Teacher Logout Successfull',
+    };
+  }
+
+  @UseGuards(StudentGuard)
+  @Get('student/logout')
+  async studentLogout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('jwt');
+    return {
+      message: 'Student Logout Successfull',
     };
   }
 }

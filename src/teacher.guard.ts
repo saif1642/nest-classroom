@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserType } from './user/user';
 
 @Injectable()
 export class TeacherGuard implements CanActivate {
@@ -10,7 +11,7 @@ export class TeacherGuard implements CanActivate {
     try {
       const jwt = request.cookies['jwt'];
       const { user_type } = this.jwtService.verify(jwt);
-      return user_type === 'teacher';
+      return user_type === UserType.TEACHER;
     } catch {
       return false;
     }

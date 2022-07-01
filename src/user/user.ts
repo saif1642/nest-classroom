@@ -28,4 +28,9 @@ export class User {
     enum: UserType,
   })
   user_type: string;
+
+  @Column({
+    default: null
+  })
+  school_id: string;
 }

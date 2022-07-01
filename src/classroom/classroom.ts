@@ -15,4 +15,7 @@ export class Classroom {
 
   @Column()
   invitation_code: string;
+
+  @Column()
+  teacher_id: number;
 }
