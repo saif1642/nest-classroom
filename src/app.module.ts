@@ -9,6 +9,9 @@ import { User } from './user/user';
 import { ClassroomModule } from './classroom/classroom.module';
 import { Classroom } from './classroom/classroom';
 import { SharedModule } from './shared/shared.module';
+import { PostModule } from './post/post.module';
+import { PostResultModule } from './post-result/post-result.module';
+import { PostSubmissionModule } from './post-submission/post-submission.module';
 
 @Module({
   imports: [
@@ -27,6 +30,9 @@ import { SharedModule } from './shared/shared.module';
     MailModule,
     ClassroomModule,
     SharedModule,
+    PostModule,
+    PostResultModule,
+    PostSubmissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

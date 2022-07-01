@@ -5,7 +5,7 @@ enum PostType {
 }
 
 @Entity('post')
-export class Classroom {
+export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,6 +16,11 @@ export class Classroom {
   type: string;
 
   @Column()
+  description: string;
+
+  @Column({
+    type: 'timestamp',
+  })
   deadline: Date;
 
   @Column()
