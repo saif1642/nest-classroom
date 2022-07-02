@@ -12,6 +12,7 @@ import { SharedModule } from './shared/shared.module';
 import { PostModule } from './post/post.module';
 import { PostResultModule } from './post-result/post-result.module';
 import { PostSubmissionModule } from './post-submission/post-submission.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PostSubmissionModule } from './post-submission/post-submission.module';
     PostModule,
     PostResultModule,
     PostSubmissionModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

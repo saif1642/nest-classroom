@@ -22,5 +22,6 @@ import { ClassRoomService } from './classroom.service';
   ],
   controllers: [ClassRoomController],
   providers: [ClassRoomService],
+  exports: [ClassRoomService],
 })
 export class ClassroomModule {}

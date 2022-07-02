@@ -12,4 +12,12 @@ export class MailService {
       text: `Your login password is ${password} and email is ${email}`,
     });
   }
+
+  async sendStudentNotification(message: string, email: string) {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Classroom Notification',
+      text: message,
+    });
+  }
 }
