@@ -16,7 +16,9 @@ import { SubscriptionService } from '../subscription/subscription.service';
 import { CreateClassroomPostDTO } from './dto/create-classroom-post.dto';
 import { PostService } from '../post/post.service';
 import { ClassroomPostSubmissionDTO } from './dto/classroom-post-submission.dto';
-import { PostSubmissionService } from 'src/post-submission/post-submission.service';
+import { PostSubmissionService } from '../post-submission/post-submission.service';
+import { PostResultDTO } from './dto/post-result.dto';
+import { PostResultService } from '../post-result/post-result.service';
 
 @Controller('classroom')
 export class ClassRoomController {
@@ -26,6 +28,7 @@ export class ClassRoomController {
     private subscriptionService: SubscriptionService,
     private postService: PostService,
     private postSubmissionService: PostSubmissionService,
+    private postResultService: PostResultService,
   ) {}
   @UseGuards(TeacherGuard)
   @Post('create')
@@ -43,11 +46,34 @@ export class ClassRoomController {
   }
 
   @UseGuards(TeacherGuard)
-  @Post('post/create')
+  @Post('teacher/classroom/end')
+  async endClassroom(@Body('classroom_id') classroom_id: number) {
+    const classroom = await this.classRoomService.findOne({
+      id: classroom_id,
+      is_active: true,
+    });
+    if (!classroom) {
+      throw new NotFoundException('Active Classroom not found');
+    }
+    await this.classRoomService.update(classroom_id, { is_active: false });
+
+    return {
+      message: 'Classroom Ended Successfully',
+    };
+  }
+
+  @UseGuards(TeacherGuard)
+  @Post('teacher/post/create')
   async createClassroomPost(
     @Body() createClassroomPostDTO: CreateClassroomPostDTO,
   ) {
     return this.postService.save(createClassroomPostDTO);
+  }
+
+  @UseGuards(TeacherGuard)
+  @Post('teacher/post/result')
+  async submitPostResult(@Body() postResultDTO: PostResultDTO) {
+    return this.postResultService.save(postResultDTO);
   }
 
   @UseGuards(StudentGuard)
@@ -84,7 +110,7 @@ export class ClassRoomController {
   }
 
   @UseGuards(StudentGuard)
-  @Post('post/submission')
+  @Post('student/post/submission')
   async classroomPostSubmission(
     @Body() classroomPostSubmissionDTO: ClassroomPostSubmissionDTO,
   ) {

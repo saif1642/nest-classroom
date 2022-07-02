@@ -60,6 +60,7 @@ export class AuthController {
     });
   }
 
+  @UseGuards(AdminGuard)
   @Post('admin/teacher/create')
   async createNewTeacher(@Body() body: RegisterDTO) {
     const { password_confirm, ...data } = body;

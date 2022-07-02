@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostResultModule } from 'src/post-result/post-result.module';
-import { PostSubmission } from 'src/post-submission/post-submission';
-import { PostModule } from 'src/post/post.module';
-import { SubscriptionModule } from 'src/subscription/subscription.module';
-import { UserModule } from 'src/user/user.module';
+import { PostResultModule } from '../post-result/post-result.module';
+import { PostSubmissionModule } from '../post-submission/post-submission.module';
+import { PostModule } from '../post/post.module';
+import { SubscriptionModule } from '../subscription/subscription.module';
+import { UserModule } from '../user/user.module';
 import { SharedModule } from '../shared/shared.module';
 import { Classroom } from './classroom';
 import { ClassRoomController } from './classroom.controller';
@@ -17,7 +17,7 @@ import { ClassRoomService } from './classroom.service';
     SubscriptionModule,
     PostModule,
     PostResultModule,
-    PostSubmission,
+    PostSubmissionModule,
     TypeOrmModule.forFeature([Classroom]),
   ],
   controllers: [ClassRoomController],
