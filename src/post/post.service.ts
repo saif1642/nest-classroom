@@ -12,4 +12,8 @@ export class PostService extends AbstractService {
   ) {
     super(postRepository);
   }
+
+  async getUpcomingClassroomEvent(classroom_id: number) {
+    return this.postRepository.find({ where: { classroom_id: classroom_id } });
+  }
 }

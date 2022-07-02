@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   InternalServerErrorException,
   NotFoundException,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -115,5 +117,17 @@ export class ClassRoomController {
     @Body() classroomPostSubmissionDTO: ClassroomPostSubmissionDTO,
   ) {
     return this.postSubmissionService.save(classroomPostSubmissionDTO);
+  }
+
+  @UseGuards(StudentGuard)
+  @Get('student/upcoming/work/:classroom_id')
+  async getUpcomingClassroomEvent(@Param('classroom_id') classroom_id: number) {
+    return this.postService.find(classroom_id);
+  }
+
+  @UseGuards(StudentGuard)
+  @Get('student/result/:student_id')
+  async getStudentResult(@Param('student_id') student_id: number) {
+    return this.postResultService.find(student_id);
   }
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-enum PostType {
+export enum PostType {
   ASSIGNMENT = 'assignment',
   EXAM = 'exam',
 }
