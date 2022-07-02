@@ -13,6 +13,10 @@ import { UserService } from 'src/user/user.service';
 import { StudentClassroomSubscribeDTO } from './dto/student-subscribe.dto';
 import { StudentGuard } from 'src/student.guard';
 import { SubscriptionService } from '../subscription/subscription.service';
+import { CreateClassroomPostDTO } from './dto/create-classroom-post.dto';
+import { PostService } from '../post/post.service';
+import { ClassroomPostSubmissionDTO } from './dto/classroom-post-submission.dto';
+import { PostSubmissionService } from 'src/post-submission/post-submission.service';
 
 @Controller('classroom')
 export class ClassRoomController {
@@ -20,6 +24,8 @@ export class ClassRoomController {
     private classRoomService: ClassRoomService,
     private userService: UserService,
     private subscriptionService: SubscriptionService,
+    private postService: PostService,
+    private postSubmissionService: PostSubmissionService,
   ) {}
   @UseGuards(TeacherGuard)
   @Post('create')
@@ -34,6 +40,14 @@ export class ClassRoomController {
       invitation_code,
       teacher_id,
     });
+  }
+
+  @UseGuards(TeacherGuard)
+  @Post('post/create')
+  async createClassroomPost(
+    @Body() createClassroomPostDTO: CreateClassroomPostDTO,
+  ) {
+    return this.postService.save(createClassroomPostDTO);
   }
 
   @UseGuards(StudentGuard)
@@ -67,5 +81,13 @@ export class ClassRoomController {
       message: 'Classrooom Subscription successful',
       subscription,
     };
+  }
+
+  @UseGuards(StudentGuard)
+  @Post('post/submission')
+  async classroomPostSubmission(
+    @Body() classroomPostSubmissionDTO: ClassroomPostSubmissionDTO,
+  ) {
+    return this.postSubmissionService.save(classroomPostSubmissionDTO);
   }
 }
