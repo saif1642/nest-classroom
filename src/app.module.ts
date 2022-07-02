@@ -13,6 +13,10 @@ import { PostModule } from './post/post.module';
 import { PostResultModule } from './post-result/post-result.module';
 import { PostSubmissionModule } from './post-submission/post-submission.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { Post } from './post/post';
+import { PostResult } from './post-result/post-result';
+import { PostSubmission } from './post-submission/post-submission';
+import { Subscription } from './subscription/subscription';
 
 @Module({
   imports: [
@@ -23,7 +27,14 @@ import { ScheduleModule } from '@nestjs/schedule';
       username: 'root',
       password: 'root',
       database: 'ambassador',
-      entities: [User, Classroom],
+      entities: [
+        User,
+        Classroom,
+        Post,
+        PostResult,
+        PostSubmission,
+        Subscription,
+      ],
       synchronize: true,
     }),
     UserModule,
